@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: trgs-zookeeper
+  namespace: trgs
+spec:
+  serviceName: trgs-zookeeper
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trgs-zookeeper
+  template:
+    metadata:
+      labels:
+        app: trgs-zookeeper
+    spec:
+      containers:
+      - name: trgs-zookeeper
+        image: bitnami/zookeeper
+        securityContext:
+          runAsUser: 1001
+        ports:
+        - containerPort: 2181
+          name: client-port
+        - containerPort: 2888
+          name: follower-port
+        - containerPort: 3888
+          name: election-port
+        env:
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"
